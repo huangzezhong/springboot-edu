@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="edu-common" />
+        <module name="edu-controller" />
+        <module name="edu-dao" />
+        <module name="edu-model" />
+        <module name="edu-service" />
+        <module name="edu-webapp" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="edu" target="1.8" />
+      <module name="edu-common" target="1.7" />
+      <module name="edu-controller" target="1.7" />
+      <module name="edu-dao" target="1.7" />
+      <module name="edu-model" target="1.7" />
+      <module name="edu-service" target="1.7" />
+      <module name="edu-webapp" target="1.7" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

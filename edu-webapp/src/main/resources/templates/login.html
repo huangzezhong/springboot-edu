@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.omg.org/spec/BPMN/20100524/MODEL">
+<head>
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="keywords"
+          content="Flat Dark Web Login Form Responsive Templates, Iphone Widget Template, Smartphone login forms,Login form, Widget Template, Responsive Templates, a Ipad 404 Templates, Flat Responsive Templates"/>
+    <link href="css/style.css" rel='stylesheet' type='text/css'/>
+</head>
+<body>
+<script>
+</script>
+
+<div class="login-form">
+    <div class="avtar">
+        <img src="images/avtar.png"/>
+    </div>
+    <form action="" id="loginForm" method="post">
+        <input type="text" class="text" name="username" onfocus="this.value = '';"/>
+        <div class="key">
+            <input type="password" name="password" onfocus="this.value = '';"/>
+        </div>
+    </form>
+    <div class="signin">
+        <input type="submit" onclick="login()" value="Login"/>
+    </div>
+</div>
+<div class="copy-rights">
+    <p>Copyright &copy; 2019</p>
+</div>
+<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" th:inline="javascript">
+    function login() {
+        /*<![CDATA[*/
+        ctxPath = /*[[@{/}]]*/ '';
+        /*]]>*/
+        //一些必要的校验以及动态验证码待补充
+        $.ajax({
+            type: "POST",
+            url: ctxPath + "toIndexByShiroAjax",
+            dataType: "json",
+            data: $("#loginForm").serialize(),
+            success: function (data) {
+                if (data.flag == '0') {
+                    layer.alert(data.msg);
+                } else {
+                    window.location.href = ctxPath + "index";
+                }
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gz.edu.dao.activiti.ActivitiMapper">
+
+    <update id="updateOldResporityByDeployInfo" parameterType="com.gz.edu.model.activiti.EduDeployment">
+        UPDATE act_ge_bytearray t1,act_ge_bytearray t2
+        SET t1.BYTES_ = t2.BYTES_
+        WHERE t1.NAME_ = T2.NAME_ AND T2.NAME_ LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+        AND T2.DEPLOYMENT_ID_ = #{id,jdbcType=VARCHAR};
+    </update>
+
+    <delete id="deleteHisTask" parameterType="com.gz.edu.model.activiti.RollBackTaskVarObj">
+        DELETE from ACT_HI_TASKINST where EXECUTION_ID_=#{execId,jdbcType=VARCHAR} and id_=#{taskId,jdbcType=VARCHAR}
+    </delete>
+
+    <update id="updateJumpTask" parameterType="com.gz.edu.model.activiti.RollBackTaskVarObj">
+        update ACT_HI_TASKINST set END_TIME_ =NULL,DURATION_=NULL,DELETE_REASON_=NULL
+        where
+        EXECUTION_ID_=#{execId,jdbcType=VARCHAR} and id_=#{jumpTaskId,jdbcType=VARCHAR}
+    </update>
+
+    <select id="getLinkId" parameterType="java.lang.String" resultType="java.lang.String">
+        select ID_ from ACT_RU_IDENTITYLINK where TASK_ID_=#{taskId,jdbcType=VARCHAR}
+    </select>
+
+    <update id="unlockTask" parameterType="java.lang.String">
+        update ACT_RU_IDENTITYLINK set TASK_ID_=NULL where ID_=#{id,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateLinkTask" parameterType="com.gz.edu.model.activiti.RollBackTaskVarObj">
+        update ACT_RU_IDENTITYLINK set TASK_ID_=#{taskId,jdbcType=VARCHAR} where ID_=#{id,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateRunTask" parameterType="com.gz.edu.model.activiti.RollBackTaskVarObj">
+        UPDATE ACT_RU_TASK a,
+        (
+        SELECT
+        TASK_DEF_KEY_,
+        FORM_KEY_,
+        NAME_,
+        ID_,
+        ASSIGNEE_
+        FROM
+        ACT_HI_TASKINST
+        WHERE
+        EXECUTION_ID_ = #{execId,jdbcType=VARCHAR}
+        AND ID_ = #{jumpTaskId,jdbcType=VARCHAR}
+        ) b
+        SET a.ID_ = b.ID_,
+        a.TASK_DEF_KEY_ = b.TASK_DEF_KEY_,
+        a.NAME_ = b.NAME_,
+        a.FORM_KEY_ = b.FORM_KEY_,
+        a.ASSIGNEE_ = b.ASSIGNEE_
+        WHERE
+        a.EXECUTION_ID_ = #{execId,jdbcType=VARCHAR}
+        AND a.id_ = #{taskId,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateExecActId" parameterType="com.gz.edu.model.activiti.RollBackTaskVarObj">
+        UPDATE ACT_RU_EXECUTION a,
+        (
+        SELECT
+        TASK_DEF_KEY_,
+        FORM_KEY_,
+        NAME_,
+        ID_
+        FROM
+        ACT_HI_TASKINST
+        WHERE
+        EXECUTION_ID_ = #{execId,jdbcType=VARCHAR}
+        AND ID_ = #{jumpTaskId,jdbcType=VARCHAR}
+        ) b
+        SET a.ACT_ID_ = b.TASK_DEF_KEY_
+        WHERE
+        a.ID_ = #{execId,jdbcType=VARCHAR}
+    </update>
+
+</mapper>

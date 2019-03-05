@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gz.edu.dao.vacation.LeaveApplicationMapper">
+    <resultMap id="BaseResultMap" type="com.gz.edu.model.vacation.LeaveApplication">
+        <id column="ID" property="id" jdbcType="INTEGER"/>
+        <result column="USER_ID" property="userId" jdbcType="INTEGER"/>
+        <result column="VA_TYPE" property="vaType" jdbcType="INTEGER"/>
+        <result column="START_TIME" property="startTime" jdbcType="TIMESTAMP"/>
+        <result column="END_TIME" property="endTime" jdbcType="TIMESTAMP"/>
+        <result column="OCCUPY_WORK_DAYS" property="occupyWorkDays" jdbcType="INTEGER"/>
+        <result column="OCCUPY_DAYS" property="occupyDays" jdbcType="INTEGER"/>
+        <result column="REASON" property="reason" jdbcType="VARCHAR"/>
+        <result column="STATE" property="state" jdbcType="INTEGER"/>
+        <result column="REMARK" property="remark" jdbcType="VARCHAR"/>
+        <result column="username" property="user.username" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, USER_ID, VA_TYPE, START_TIME, END_TIME, OCCUPY_WORK_DAYS, OCCUPY_DAYS, REASON,
+        STATE, REMARK
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_edu_leave_application
+        where ID = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectListByIds" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        la.ID, la.USER_ID, la.VA_TYPE, la.START_TIME, la.END_TIME, la.OCCUPY_WORK_DAYS, la.OCCUPY_DAYS, la.REASON,
+        la.STATE, la.REMARK,u.username
+        from t_edu_leave_application la left join t_sys_user u on la.USER_ID = u.USER_ID
+        where la.ID in
+        <foreach collection="idList" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="selectListByUserId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        la.ID, la.USER_ID, la.VA_TYPE, la.START_TIME, la.END_TIME, la.OCCUPY_WORK_DAYS, la.OCCUPY_DAYS, la.REASON,
+        la.STATE, la.REMARK,u.username
+        from t_edu_leave_application la left join t_sys_user u on la.USER_ID = u.USER_ID
+        where la.USER_ID = #{userId,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from t_edu_leave_application
+        where ID = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.gz.edu.model.vacation.LeaveApplication" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into t_edu_leave_application ( USER_ID, VA_TYPE,
+        START_TIME, END_TIME, OCCUPY_WORK_DAYS,
+        OCCUPY_DAYS, REASON, STATE,
+        REMARK)
+        values ( #{userId,jdbcType=INTEGER}, #{vaType,jdbcType=INTEGER},
+        #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{occupyWorkDays,jdbcType=INTEGER},
+        #{occupyDays,jdbcType=INTEGER}, #{reason,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER},
+        #{remark,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.gz.edu.model.vacation.LeaveApplication">
+        insert into t_edu_leave_application
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="userId != null">
+                USER_ID,
+            </if>
+            <if test="vaType != null">
+                VA_TYPE,
+            </if>
+            <if test="startTime != null">
+                START_TIME,
+            </if>
+            <if test="endTime != null">
+                END_TIME,
+            </if>
+            <if test="occupyWorkDays != null">
+                OCCUPY_WORK_DAYS,
+            </if>
+            <if test="occupyDays != null">
+                OCCUPY_DAYS,
+            </if>
+            <if test="reason != null">
+                REASON,
+            </if>
+            <if test="state != null">
+                STATE,
+            </if>
+            <if test="remark != null">
+                REMARK,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="vaType != null">
+                #{vaType,jdbcType=INTEGER},
+            </if>
+            <if test="startTime != null">
+                #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null">
+                #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="occupyWorkDays != null">
+                #{occupyWorkDays,jdbcType=INTEGER},
+            </if>
+            <if test="occupyDays != null">
+                #{occupyDays,jdbcType=INTEGER},
+            </if>
+            <if test="reason != null">
+                #{reason,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.gz.edu.model.vacation.LeaveApplication">
+        update t_edu_leave_application
+        <set>
+            <if test="userId != null">
+                USER_ID = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="vaType != null">
+                VA_TYPE = #{vaType,jdbcType=INTEGER},
+            </if>
+            <if test="startTime != null">
+                START_TIME = #{startTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null">
+                END_TIME = #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="occupyWorkDays != null">
+                OCCUPY_WORK_DAYS = #{occupyWorkDays,jdbcType=INTEGER},
+            </if>
+            <if test="occupyDays != null">
+                OCCUPY_DAYS = #{occupyDays,jdbcType=INTEGER},
+            </if>
+            <if test="reason != null">
+                REASON = #{reason,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                STATE = #{state,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null">
+                REMARK = #{remark,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.gz.edu.model.vacation.LeaveApplication">
+        update t_edu_leave_application
+        set USER_ID = #{userId,jdbcType=INTEGER},
+        VA_TYPE = #{vaType,jdbcType=INTEGER},
+        START_TIME = #{startTime,jdbcType=TIMESTAMP},
+        END_TIME = #{endTime,jdbcType=TIMESTAMP},
+        OCCUPY_WORK_DAYS = #{occupyWorkDays,jdbcType=INTEGER},
+        OCCUPY_DAYS = #{occupyDays,jdbcType=INTEGER},
+        REASON = #{reason,jdbcType=VARCHAR},
+        STATE = #{state,jdbcType=INTEGER},
+        REMARK = #{remark,jdbcType=VARCHAR}
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>
